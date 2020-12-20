@@ -5,7 +5,8 @@ export default interface Action<T> {
 
 export interface StateInterface {
     genres: Array<Genre>,
-    movies: Array<Movie>
+    movies: Array<Movie>,
+    currentGenre: Genre | null
 }
 
 export interface Genre {

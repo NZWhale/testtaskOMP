@@ -29,7 +29,7 @@ class MainPage extends React.Component<RouteComponentProps, any> {
             return data
         })
     return data
-    }
+}
 
     componentDidMount() {
         this.getGenres()

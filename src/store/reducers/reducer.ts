@@ -9,6 +9,8 @@ const reducer = (state = initialState, action: Action<any>): StateInterface => {
             return { ...state, genres: action.payload}
         case "SET_MOVIES":
             return { ...state, movies: action.payload}
+        case "SET_CURRENT_GENRE":
+            return { ...state, currentGenre: action.payload}
     }
     return state
 }
