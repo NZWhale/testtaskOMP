@@ -3,7 +3,8 @@ import { StateInterface } from "../types"
 
 
 const initialState: StateInterface = {
-    genres: []
+    genres: [],
+    movies: [],
 }
 
 export default initialState

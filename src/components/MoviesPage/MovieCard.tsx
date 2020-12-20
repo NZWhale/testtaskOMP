@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { Button, Card } from 'react-bootstrap';
+import { Movie } from '../../types';
 
-class MovieCard extends React.Component {
+interface MovieCardProps {
+    movie: Movie
+    key: any
+}
+
+class MovieCard extends React.Component<MovieCardProps> {
     render() {
         return (
             <>
@@ -9,14 +15,13 @@ class MovieCard extends React.Component {
                     width: '18rem',
                     marginBottom: "12px"
              }}>
-                    <Card.Img variant="top" src="holder.js/100px180" />
+                    <Card.Img variant="top" src={`https://image.tmdb.org/t/p/w500/${this.props.movie.poster_path}`} />
                     <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
+                        <Card.Title>{this.props.movie.title}</Card.Title>
                         <Card.Text>
-                            Some quick example text to build on the card title and make up the bulk of
-                            the card's content.
+                            {this.props.movie.overview}
                         </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
+                        <Button variant="primary">Buy</Button>
                     </Card.Body>
                 </Card>
             </>

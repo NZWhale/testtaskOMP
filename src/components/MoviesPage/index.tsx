@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import store from '../../store/store';
-import { Genre, StateInterface } from '../../types';
+import { Genre, Movie, StateInterface } from '../../types';
 import MovieCard from './MovieCard';
 
 
 interface PropsFromState {
-    genres: Array<object>
+    genres: Array<Genre>,
+    movies: Array<Movie>
 }
 
 class MoviesPage extends React.Component<PropsFromState> {
@@ -15,15 +16,13 @@ class MoviesPage extends React.Component<PropsFromState> {
         price: "2.5",
     }
 
-    // genres: Array<Genre> = store.getState().genres
-
-    
-
     render() {
-        const genresList = this.props.genres.map((genre: any, index) =>  
-            <option>{genre.name}</option>
+        const genresList = this.props.genres.map((genre: Genre, index) =>  
+            <option key={index}>{genre.name}</option>
         )
-        console.log(genresList)
+        const moviesList = this.props.movies.map((movie: any, index) =>
+            <MovieCard movie={movie} key={index.toString()}/>
+        )
         return (
             <div style={{
                 display: "flex",
@@ -55,14 +54,7 @@ class MoviesPage extends React.Component<PropsFromState> {
                     marginLeft: "25%",
                     marginTop: "12px"
                 }}>
-                    <MovieCard />
-                    <MovieCard />
-                    <MovieCard />
-                    <MovieCard />
-                    <MovieCard />
-                    <MovieCard />
-                    <MovieCard />
-                    <MovieCard />
+                    {moviesList}
                 </div>
             </div>
         )
@@ -70,7 +62,8 @@ class MoviesPage extends React.Component<PropsFromState> {
 }
 
 const mapStateToProps = (state: StateInterface): PropsFromState => ({
-    genres: state.genres
+    genres: state.genres,
+    movies: state.movies
 })
 
 export default connect(mapStateToProps)(MoviesPage)
