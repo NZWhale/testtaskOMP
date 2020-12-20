@@ -1,13 +1,29 @@
 import * as React from 'react';
 import { Form } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import store from '../../store/store';
+import { Genre, StateInterface } from '../../types';
 import MovieCard from './MovieCard';
 
 
-class MoviesPage extends React.Component {
+interface PropsFromState {
+    genres: Array<object>
+}
+
+class MoviesPage extends React.Component<PropsFromState> {
     state = {
-        price: "2.5"
+        price: "2.5",
     }
+
+    // genres: Array<Genre> = store.getState().genres
+
+    
+
     render() {
+        const genresList = this.props.genres.map((genre: any, index) =>  
+            <option>{genre.name}</option>
+        )
+        console.log(genresList)
         return (
             <div style={{
                 display: "flex",
@@ -23,13 +39,9 @@ class MoviesPage extends React.Component {
                             <Form.Control type="text" placeholder="Movie title" />
                         </Form.Group>
                         <Form.Group controlId="exampleForm.ControlSelect1">
-                            <Form.Label>Ganre</Form.Label>
+                            <Form.Label>Genre</Form.Label>
                             <Form.Control as="select">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                                {genresList}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="formBasicRange">
@@ -57,4 +69,8 @@ class MoviesPage extends React.Component {
     }
 }
 
-export default MoviesPage
+const mapStateToProps = (state: StateInterface): PropsFromState => ({
+    genres: state.genres
+})
+
+export default connect(mapStateToProps)(MoviesPage)
