@@ -2,7 +2,7 @@ import { createBrowserHistory } from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
-import { connect, Provider } from "react-redux";
+import { Provider } from "react-redux";
 import MainPage from './components/MainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import store from './store/store';

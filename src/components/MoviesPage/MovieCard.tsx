@@ -21,7 +21,7 @@ class MovieCard extends React.Component<MovieCardProps> {
                         <Card.Text>
                             {this.props.movie.overview}
                         </Card.Text>
-                        <Button variant="primary">Buy</Button>
+                        <Button variant="primary">Buy</Button> {this.props.movie.price} $
                     </Card.Body>
                 </Card>
             </>

@@ -5,7 +5,9 @@ import { StateInterface } from "../types"
 const initialState: StateInterface = {
     genres: [],
     movies: [],
-    currentGenre: null
+    topMovies: [],
+    currentGenre: null,
+    books: []
 }
 
 export default initialState
