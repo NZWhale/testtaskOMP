@@ -11,6 +11,14 @@ const initialState: StateInterface = {
     musicGenres: [],
     newReleases: [],
     playlists: [],
+    fullPlaylistInfo: {
+        images: [],
+        name: "",
+        description: "",
+        tracks: {
+            href: ""
+        }
+    },
 }
 
 export default initialState

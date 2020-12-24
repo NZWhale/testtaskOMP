@@ -1,6 +1,8 @@
+import { BrowserHistory } from 'history';
 import * as React from 'react';
 import { Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
 import setMusicGenres from '../../store/actionCreaters/setMusicGenres';
 import setNewReleases from '../../store/actionCreaters/setNewReleases';
 import setPlaylists from '../../store/actionCreaters/setPlaylists';
@@ -9,7 +11,7 @@ import { Album, StateInterface } from '../../types';
 import MusicCard from './MusicCard';
 import PlaylistCard from './PlaylistCard';
 
-export const token = "BQChSdGtKohPK9nPOqmA7VDHH0zpnoe3Wb14_912729nK7zfVNVcyB1Rf_6YliIKGGLaMV8Ie52cK-sRCcMw-y7q8E-dkqZeNP8enOeSnrtF2WOi0fK82WVu9xC4a7gvpRIlBEkGrJ6ZUhN3bkegmOlY2IMLdWpQvKVIzdNnpV2D0erpFZU"
+export const token = "BQB9tTCVMfInM0a_jLJ8ZH4GQ1DnJHmHxeGp6w7TJAjwHdQWCyEFtKK-quk_IM38O60Jq8UfR_OTZIHfAB2td0hOy2lO5MY6iOfiFLyJqKF5jAlQqrDwiFWiVA1pViD3zU9Hv6KXh_lwYoejnEuuDkxLsK0MgLT56cJSb5Ak0w9kWoeJCoA"
 
 interface PropsFromState {
     musicGenres: Array<any>,
@@ -17,7 +19,11 @@ interface PropsFromState {
     playlists: Array<any>
 }
 
-class MusicPage extends React.Component<PropsFromState> {
+interface MusicPageProps extends RouteComponentProps {
+    history: BrowserHistory
+}
+
+class MusicPage extends React.Component<PropsFromState & MusicPageProps> {
     state = {
         price: "2.5",
         isGenreSelected: false
@@ -121,10 +127,11 @@ class MusicPage extends React.Component<PropsFromState> {
             <option key={index} value={genre.id}>{genre.name}</option>
         )
         const musicList = this.props.newReleases.map((release: Album, index: any) =>
-            <MusicCard images={release.images} artists={release.artists} key={index.toString()} />
+            // <MusicCard  
+            <MusicCard history={this.props.history} location={this.props.location} match={this.props.match} images={release.images} artists={release.artists} key={index.toString()} />
         )
         const playList = this.props.playlists.map((playlist: any, index: any) =>
-            <PlaylistCard images={playlist.images} name={playlist.name} description={playlist.description} tracks={playlist.tracks} key={index.toString()} />
+            <PlaylistCard history={this.props.history} location={this.props.location} match={this.props.match} images={playlist.images} name={playlist.name} description={playlist.description} tracks={playlist.tracks} key={index.toString()} />
         )
 
         return (

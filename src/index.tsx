@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router-dom';
+import { Route, Router } from 'react-router-dom';
 import { Provider } from "react-redux";
 import MainPage from './components/MainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,7 +14,8 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <MainPage />
+        {/* <MainPage history={history}/> */}
+        <Route component={MainPage} />
       </Provider>
     )
   }

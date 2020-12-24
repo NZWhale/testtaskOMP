@@ -11,7 +11,19 @@ export interface StateInterface {
   books: Array<Book>,
   musicGenres: Array<any>,
   newReleases: Array<Album>,
-  playlists: Array<any>
+  playlists: Array<any>,
+  fullPlaylistInfo: FullPlaylistInfo 
+}
+
+export interface Track {
+  href: string
+}
+
+export interface FullPlaylistInfo {
+  images: Array<Image>
+  name: string
+  description: string
+  tracks: Track
 }
 
 export interface Album {

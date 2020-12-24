@@ -21,6 +21,8 @@ const reducer = (state = initialState, action: Action<any>): StateInterface => {
             return { ...state, newReleases: action.payload}
         case "SET_PLAYLISTS":
             return { ...state, playlists: action.payload}
+        case "SET_FULL_PLAYLIST_INFO":
+            return { ...state, fullPlaylistInfo: action.payload}
     }
     return state
 }

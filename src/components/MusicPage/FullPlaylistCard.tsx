@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { Button, Card } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import { token } from '.';
-import { Album, Artist, Image } from '../../types';
+import { Album, Artist, FullPlaylistInfo, Image, StateInterface } from '../../types';
 
 
-interface TrackItem {
-    added_at: string,
-    track: Track
-}
+
 
 
 interface Track {
@@ -35,38 +33,45 @@ interface FullPlaylistCardProps {
 
 }
 
-class FullPlaylistCard extends React.Component<FullPlaylistCardProps> {
+interface PropsFromState {
+    fullPlaylistInfo: FullPlaylistInfo
+}
+
+class FullPlaylistCard extends React.Component<FullPlaylistCardProps & PropsFromState> {
     state = {
         tracks: []
     }
 
 
-    // getPlaylistsTracks(trackshref: string) {
-    //     const result = fetch(`${trackshref}`, {
-    //         method: 'GET',
-    //         headers: { 'Authorization' : 'Bearer ' + token}
-    //     })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //         return data
-    //     })
+    getPlaylistsTracks(trackshref: string) {
+        const result = fetch(`${trackshref}`, {
+            method: 'GET',
+            headers: { 'Authorization' : 'Bearer ' + token}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            return data
+        })
 
-    //     return result
-    // }
+        return result
+    }
 
-    // componentDidMount() {
-    //     this.getPlaylistsTracks(this.props.tracks.href)
-    //     .then((data) => {
-    //         this.setState({tracks: data.items})
-    //         console.log(data)
-    //     })
-    // }
+    componentDidMount() {
+        this.getPlaylistsTracks(this.props.fullPlaylistInfo.tracks.href)
+        .then((data) => {
+            this.setState({tracks: data.items})
+            console.log(data)
+        })
+    }
 
     render() {
-        const tracks = this.props.tracks.map((track: any) =>
-        <Card>
+        const tracks = this.state.tracks.map((track: any) =>
+        <Card style={{
+            width: '18rem',
+            marginBottom: "12px"
+        }}>
         <Card.Text>{track.track.artists.map((artist: Artist) => artist.name + " ") + "-" + track.track.name} <img width = "50px" src={track.track.album.images[2].url} /></Card.Text>
-        <audio controls>
+        <audio controls style={{width: "99%"}}>
         <source src={track.track.preview_url}></source>
         </audio>
         </Card>
@@ -77,11 +82,6 @@ class FullPlaylistCard extends React.Component<FullPlaylistCardProps> {
                         width: '18rem',
                         marginBottom: "12px"
                     }}>
-                        <Card.Img variant="top" src={this.props.images[0].url} />
-                        <Card.Body>
-                            <Card.Title>{this.props.name}</Card.Title>
-                            <Card.Text>{this.props.description}</Card.Text>
-                        </Card.Body>
                         {tracks}
                     </Card>
             </>
@@ -89,4 +89,8 @@ class FullPlaylistCard extends React.Component<FullPlaylistCardProps> {
     }
 }
 
-export default FullPlaylistCard
+const mapStateToProps = (state: StateInterface): PropsFromState => ({
+    fullPlaylistInfo: state.fullPlaylistInfo,
+})
+
+export default connect(mapStateToProps)(FullPlaylistCard)
