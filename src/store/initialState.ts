@@ -7,7 +7,10 @@ const initialState: StateInterface = {
     movies: [],
     topMovies: [],
     currentGenre: null,
-    books: []
+    books: [],
+    musicGenres: [],
+    newReleases: [],
+    playlists: [],
 }
 
 export default initialState

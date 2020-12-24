@@ -12,6 +12,8 @@ import Header from '../Header';
 import MoviesPage from '../MoviesPage';
 import MusicPage from '../MusicPage';
 
+
+
 const history = createBrowserHistory()
 
 class MainPage extends React.Component<RouteComponentProps, any> {

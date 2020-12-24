@@ -1,26 +1,29 @@
 import * as React from 'react';
 import { Button, Card } from 'react-bootstrap';
-import AudioPlayer from "react-h5-audio-player";
+import { Album, Artist, Image } from '../../types';
 
 
-class MusicCard extends React.Component {
+
+interface MusicCardProps {
+    images: Array<Image>,
+    artists: Array<Artist>
+
+}
+
+class MusicCard extends React.Component<MusicCardProps> {
+    
     render() {
         return (
             <>
-                <Card style={{ 
-                    width: '18rem',
-                    marginBottom: "12px"
-             }}>
-                    <Card.Img variant="top" src="holder.js/100px180" />
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the bulk of
-                            the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                </Card>
+                    <Card style={{
+                        width: '18rem',
+                        marginBottom: "12px"
+                    }}>
+                        <Card.Img variant="top" src={this.props.images[0].url} />
+                        <Card.Body>
+                            <Card.Title>{this.props.artists.map(artist => artist.name + " ")}</Card.Title>
+                        </Card.Body>
+                    </Card>
             </>
         )
     }
