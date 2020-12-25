@@ -62,8 +62,8 @@ class FullPlaylistCard extends React.Component<FullPlaylistCardProps & PropsFrom
         this.getPlaylistsTracks(this.props.fullPlaylistInfo.tracks.href)
             .then((data) => {
                 this.setState({ tracks: data.items })
-                this.setState({isLoaded: true})
             })
+            .then( () => this.setState({isLoaded: true}) )
     }
 
     render() {
