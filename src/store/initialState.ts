@@ -19,7 +19,9 @@ const initialState: StateInterface = {
             href: ""
         }
     },
-    artistId: ""
+    artistId: "",
+    artists: [],
+    accessToken: "",
 }
 
 export default initialState

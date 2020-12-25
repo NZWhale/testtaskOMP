@@ -6,6 +6,8 @@ import store from '../../store/store';
 import { Book, StateInterface } from '../../types';
 import getRandomInRange from '../../utils';
 import BookCard from './BookCard';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from 'react-loader-spinner';
 
 interface PropsFromState {
     books: Array<Book>
@@ -15,7 +17,8 @@ class BooksPage extends React.Component<PropsFromState> {
     state = {
         price: "2.5",
         author: "",
-        bookTitle: ""
+        bookTitle: "",
+        isLoaded: false
     }
 
     getBooks() {
@@ -52,7 +55,7 @@ class BooksPage extends React.Component<PropsFromState> {
                     book.price = getRandomInRange(0, 5)
                 })
                 store.dispatch(setBooks(books))
-                console.log(store.getState().books)
+                this.setState({isLoaded: true})
             })
     }
 
@@ -78,16 +81,16 @@ class BooksPage extends React.Component<PropsFromState> {
                                     placeholder="Enter book title"
                                     aria-label="Recipient's username"
                                     aria-describedby="basic-addon2"
-                                    onChange={(e) => this.setState({bookTitle: e.target.value})}
+                                    onChange={(e) => this.setState({ bookTitle: e.target.value })}
                                 />
                                 <InputGroup.Append>
                                     <Button variant="outline-secondary" onClick={() => {
-                                this.getBooksByKeywords(this.state.bookTitle)
-                                    .then((data) => {
-                                        const books: Array<Book> = data.items
-                                        store.dispatch(setBooks(books))
-                                    })
-                            }}>Search</Button>
+                                        this.getBooksByKeywords(this.state.bookTitle)
+                                            .then((data) => {
+                                                const books: Array<Book> = data.items
+                                                store.dispatch(setBooks(books))
+                                            })
+                                    }}>Search</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                         </Form.Group>
@@ -98,32 +101,36 @@ class BooksPage extends React.Component<PropsFromState> {
                                     placeholder="Enter author name"
                                     aria-label="Recipient's username"
                                     aria-describedby="basic-addon2"
-                                    onChange={(e) => this.setState({author: e.target.value})}
+                                    onChange={(e) => this.setState({ author: e.target.value })}
                                 />
                                 <InputGroup.Append>
                                     <Button variant="outline-secondary" onClick={() => {
-                                this.getBooksByAuthor(this.state.author)
-                                    .then((data) => {
-                                        const books: Array<Book> = data.items
-                                        store.dispatch(setBooks(books))
-                                    })
-                            }}>Search</Button>
+                                        this.getBooksByAuthor(this.state.author)
+                                            .then((data) => {
+                                                const books: Array<Book> = data.items
+                                                store.dispatch(setBooks(books))
+                                            })
+                                    }}>Search</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                         </Form.Group>
-                        <Form.Group controlId="formBasicRange">
-                            <Form.Label>Price</Form.Label>
-                            <Form.Control type="text" placeholder={`${this.state.price} $`} disabled={true} />
-                            <Form.Control type="range" min="0" max="5" step="0.1" onChange={(e) => { this.setState({ price: e.target.value }) }} />
-                        </Form.Group>
                     </Form>
                 </div>
-                <div style={{
-                    marginLeft: "20%",
-                    marginTop: "12px"
-                }}>
-                    {booksList}
-                </div>
+                <Loader style={{ marginTop: "20%", marginLeft: "30%" }}
+                    type="Oval"
+                    color="#00BFFF"
+                    height={100}
+                    width={100}
+                    visible={this.state.isLoaded ? false : true}
+                />
+                {this.state.isLoaded &&
+                    <div style={{
+                        marginLeft: "20%",
+                        marginTop: "12px"
+                    }}>
+                        {booksList}
+                    </div>
+                }
             </div>
         )
     }

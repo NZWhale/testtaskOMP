@@ -1,22 +1,28 @@
 import { BrowserHistory } from 'history';
 import * as React from 'react';
-import { Form } from 'react-bootstrap';
+import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
+import setArtistsTopSongs from '../../store/actionCreaters/setArtists';
 import setMusicGenres from '../../store/actionCreaters/setMusicGenres';
 import setNewReleases from '../../store/actionCreaters/setNewReleases';
 import setPlaylists from '../../store/actionCreaters/setPlaylists';
 import store from '../../store/store';
-import { Album, StateInterface } from '../../types';
+import { Album, Artist, Book, StateInterface } from '../../types';
+import ArtistCard from './ArtistCard';
 import MusicCard from './MusicCard';
 import PlaylistCard from './PlaylistCard';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from 'react-loader-spinner'
 
-export const token = "BQA3hqacD0wlGXYR3SWwl-gCgvEidAhvU-Pb4hhGkmgK1YiYR72fZ5JCvM7s0xv_Tx2w4GFX0c4InsANnR7VcQtMHjrWar3AQIWvcNOxTJy4v0TzVrRxXzfFjI6Je27Ey_1pR-BgWqVoURvOwfkIf51A5rXbdEgQqKCE_lZ0umvkpyDAJbM"
+
 
 interface PropsFromState {
     musicGenres: Array<any>,
     newReleases: Array<Album>,
-    playlists: Array<any>
+    playlists: Array<any>,
+    artists: Array<Artist>,
+    accessToken: string
 }
 
 interface MusicPageProps extends RouteComponentProps {
@@ -26,30 +32,31 @@ interface MusicPageProps extends RouteComponentProps {
 class MusicPage extends React.Component<PropsFromState & MusicPageProps> {
     state = {
         price: "2.5",
-        isGenreSelected: false
+        authorName: "",
+        isGenreSelected: false,
+        isAuthorSelected: false,
+        isPlaylistsLoaded: false,
+        isLoaded: false
     }
 
+    token = this.props.accessToken
+    
     getGenres = () => {
-
         const result = fetch(`https://api.spotify.com/v1/browse/categories?locale=sv_US`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: { 'Authorization': 'Bearer ' + this.token }
         })
             .then((response) => response.json())
             .then((data) => {
                 return data
             })
-
         return result
     }
 
     getPlaylistByGenre = (genreId: string) => {
-
-        const limit = 10;
-
         const result = fetch(`https://api.spotify.com/v1/browse/categories/${genreId}/playlists`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: { 'Authorization': 'Bearer ' + this.token }
         })
             .then((response) => response.json())
             .then((data) => {
@@ -59,53 +66,51 @@ class MusicPage extends React.Component<PropsFromState & MusicPageProps> {
         return result
     }
     getAlbumsByArtist = (artist: string) => {
-
         const limit = 10;
-
-
-
         const result = fetch(`https://api.spotify.com/v1/artists/${artist}/albums?market=ES&limit=${limit}&offset=5`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: { 'Authorization': 'Bearer ' + this.token }
         })
             .then((response) => response.json())
             .then((data) => {
                 return data
             })
-
         return result
     }
 
     getTracks = (tracksEndPoint: string) => {
-
         const limit = 10;
-
-
-
         const result = fetch(`${tracksEndPoint}?limit=${limit}`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: { 'Authorization': 'Bearer ' + this.token }
         })
             .then((response) => response.json())
             .then((data) => {
                 return data
             })
-
         return result
     }
     getNewRelease = () => {
-
-        const limit = 10;
-
         const result = fetch(`https://api.spotify.com/v1/browse/new-releases`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: { 'Authorization': 'Bearer ' + this.token }
         })
             .then((response) => response.json())
             .then((data) => {
                 return data
             })
+        return result
+    }
 
+    getArtistsIds(artist: string) {
+        const result = fetch(`https://api.spotify.com/v1/search?q=${artist}&type=artist`, {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + this.token }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return data
+            })
         return result
     }
 
@@ -119,19 +124,24 @@ class MusicPage extends React.Component<PropsFromState & MusicPageProps> {
             .then(data => {
                 const newReleases: Array<Album> = data.albums.items
                 store.dispatch(setNewReleases(newReleases))
+                this.setLoadedStatus()
             })
     }
-
+    setLoadedStatus() {
+        this.setState({ isLoaded: true })
+    }
     render() {
         const musicGenresList = this.props.musicGenres.map((genre: any, index) =>
             <option key={index} value={genre.id}>{genre.name}</option>
         )
-        const musicList = this.props.newReleases.map((release: Album, index: any) =>
-            // <MusicCard  
+        const musicList = this.props.newReleases.map((release: Album, index: any, arr: any) =>
             <MusicCard history={this.props.history} location={this.props.location} match={this.props.match} images={release.images} artists={release.artists} key={index.toString()} />
         )
         const playList = this.props.playlists.map((playlist: any, index: any) =>
             <PlaylistCard history={this.props.history} location={this.props.location} match={this.props.match} images={playlist.images} name={playlist.name} description={playlist.description} tracks={playlist.tracks} key={index.toString()} />
+        )
+        const artistsList = this.props.artists.map((artist: any, index: any) =>
+            <ArtistCard history={this.props.history} location={this.props.location} match={this.props.match} artist={artist} key={index.toString()} />
         )
 
         return (
@@ -141,12 +151,31 @@ class MusicPage extends React.Component<PropsFromState & MusicPageProps> {
                 justifyContent: "start"
             }}>
                 <div style={{
-                    marginTop: "12px"
+                    marginTop: "12px",
+                    marginLeft: "12px"
                 }}>
                     <Form>
                         <Form.Group controlId="exampleForm.ControlInput1">
-                            <Form.Label>Book</Form.Label>
-                            <Form.Control type="text" placeholder="Book title" />
+                            <Form.Label>Search by author</Form.Label>
+                            <InputGroup className="mb-3">
+                                <FormControl
+                                    placeholder="Author name"
+                                    aria-label="Recipient's username"
+                                    aria-describedby="basic-addon2"
+                                    onChange={(e) => this.setState({ authorName: e.target.value })}
+                                />
+                                <InputGroup.Append>
+                                    <Button variant="outline-secondary" onClick={() => {
+                                        this.getArtistsIds(this.state.authorName)
+                                            .then((data) => {
+                                                const artists: Array<Artist> = data.artists.items
+                                                store.dispatch(setArtistsTopSongs(artists))
+                                                this.setState({ isAuthorSelected: true })
+                                                this.setState({ isGenreSelected: false })
+                                            })
+                                    }}>Search</Button>
+                                </InputGroup.Append>
+                            </InputGroup>
                         </Form.Group>
                         <Form.Group controlId="exampleForm.ControlSelect1">
                             <Form.Label>Ganre</Form.Label>
@@ -156,24 +185,29 @@ class MusicPage extends React.Component<PropsFromState & MusicPageProps> {
                                         const playlists = data.playlists.items
                                         store.dispatch(setPlaylists(playlists))
                                         this.setState({ isGenreSelected: true })
+                                        this.setState({ isAuthorSelected: false })
                                     })
                             }}>
                                 {musicGenresList}
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group controlId="formBasicRange">
-                            <Form.Label>Price</Form.Label>
-                            <Form.Control type="text" placeholder={`${this.state.price} $`} disabled={true} />
-                            <Form.Control type="range" min="0" max="5" step="0.1" onChange={(e) => { this.setState({ price: e.target.value }) }} />
-                        </Form.Group>
                     </Form>
                 </div>
-                <div style={{
-                    marginLeft: "25%",
-                    marginTop: "12px"
-                }}>
-                    {this.state.isGenreSelected ? playList : musicList}
-                </div>
+                <Loader style={{ marginTop: "20%", marginLeft: "30%" }}
+                    type="Oval"
+                    color="#00BFFF"
+                    height={100}
+                    width={100}
+                    visible={this.state.isLoaded ? false : true}
+                />
+                {this.state.isLoaded &&
+                    <div style={{
+                        marginLeft: "21%",
+                        marginTop: "12px"
+                    }}>
+                        {this.state.isAuthorSelected ? artistsList : (this.state.isGenreSelected ? playList : musicList)}
+                    </div>
+                }
             </div>
         )
     }
@@ -183,7 +217,9 @@ class MusicPage extends React.Component<PropsFromState & MusicPageProps> {
 const mapStateToProps = (state: StateInterface): PropsFromState => ({
     musicGenres: state.musicGenres,
     newReleases: state.newReleases,
-    playlists: state.playlists
+    playlists: state.playlists,
+    artists: state.artists,
+    accessToken: state.accessToken,
 })
 
 export default connect(mapStateToProps)(MusicPage)

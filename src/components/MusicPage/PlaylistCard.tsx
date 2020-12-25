@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { token } from '.';
+
 import setFullPlaylistInfo from '../../store/actionCreaters/setFullPlaylistInfo';
 import store from '../../store/store';
 import { Album, Artist, FullPlaylistInfo, Image, StateInterface, Track } from '../../types';
@@ -19,19 +19,22 @@ interface PlaylistCardProps extends RouteComponentProps{
 }
 
 interface PropsFromState {
-    fullPlaylistInfo: FullPlaylistInfo
+    fullPlaylistInfo: FullPlaylistInfo,
+    accessToken: string
 }
 
-class PlaylistCard extends React.Component<PlaylistCardProps> {
+class PlaylistCard extends React.Component<PlaylistCardProps & PropsFromState> {
     state = {
         isCardOpen: false,
         tracks: []
     }
 
+    token = this.props.accessToken
+
     getPlaylistsTracks(trackshref: string) {
         const result = fetch(`${trackshref}`, {
             method: 'GET',
-            headers: { 'Authorization' : 'Bearer ' + token}
+            headers: { 'Authorization' : 'Bearer ' + this.token}
         })
         .then((response) => response.json())
         .then((data) => {
@@ -75,9 +78,6 @@ class PlaylistCard extends React.Component<PlaylistCardProps> {
                             <Card.Title>{this.props.name}</Card.Title>
                             <Card.Text>{this.props.description}</Card.Text>
                         </Card.Body>
-                        {/* {this.state.isCardOpen && 
-                            <FullPlaylistCard images={this.props.images} name={this.props.name} description={this.props.description} tracks={this.state.tracks}/>
-                        } */}
                     </Card>
             </>
         )
@@ -86,6 +86,7 @@ class PlaylistCard extends React.Component<PlaylistCardProps> {
 
 const mapStateToProps = (state: StateInterface): PropsFromState => ({
     fullPlaylistInfo: state.fullPlaylistInfo,
+    accessToken: state.accessToken,
 })
 
 export default connect(mapStateToProps)(PlaylistCard)

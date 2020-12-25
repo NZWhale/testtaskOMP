@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Form } from 'react-bootstrap';
+import Loader from 'react-loader-spinner';
 import { connect } from 'react-redux';
 import setCurrentGenre from '../../store/actionCreaters/setCurrentGenre';
 import setGenres from '../../store/actionCreaters/setGenres';
@@ -9,6 +10,7 @@ import store from '../../store/store';
 import { Genre, Movie, StateInterface } from '../../types';
 import getRandomInRange from '../../utils';
 import MovieCard from './MovieCard';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 
 interface PropsFromState {
@@ -20,7 +22,8 @@ interface PropsFromState {
 class MoviesPage extends React.Component<PropsFromState> {
     state = {
         price: "3",
-        topMovies: []
+        topMovies: [],
+        isLoaded: false
     }
 
     setMoviesByGenre(genre: Genre) {
@@ -83,7 +86,7 @@ class MoviesPage extends React.Component<PropsFromState> {
                 })
                 store.dispatch(setMovies(movies))
                 store.dispatch(setTopMovies(movies))
-                console.log(store.getState().movies)
+                this.setState({isLoaded: true})
             })
     }
 
@@ -149,12 +152,21 @@ class MoviesPage extends React.Component<PropsFromState> {
                         </Form.Group>
                     </Form>
                 </div>
-                <div style={{
-                    marginLeft: "25%",
-                    marginTop: "12px"
-                }}>
-                    {moviesList}
-                </div>
+                <Loader style={{ marginTop: "20%", marginLeft: "35%" }}
+                    type="Oval"
+                    color="#00BFFF"
+                    height={100}
+                    width={100}
+                    visible={this.state.isLoaded ? false : true}
+                />
+                {this.state.isLoaded &&
+                    <div style={{
+                        marginLeft: "25%",
+                        marginTop: "12px"
+                    }}>
+                        {moviesList}
+                    </div>
+                }
             </div>
         )
     }

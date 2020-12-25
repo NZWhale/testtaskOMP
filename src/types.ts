@@ -13,7 +13,9 @@ export interface StateInterface {
   newReleases: Array<Album>,
   playlists: Array<any>,
   fullPlaylistInfo: FullPlaylistInfo,
-  artistId: string
+  artistId: string,
+  artists: Array<Artist>,
+  accessToken: string
 }
 
 export interface Track {
@@ -47,6 +49,7 @@ export interface Artist {
   external_urls: object,
   href: string,
   id: string,
+  images: Array<Image>,
   name: string,
   type: string,
   uri: string

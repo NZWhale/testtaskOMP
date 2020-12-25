@@ -25,6 +25,10 @@ const reducer = (state = initialState, action: Action<any>): StateInterface => {
             return { ...state, fullPlaylistInfo: action.payload}
         case "SET_ARTIST_ID":
             return { ...state, artistId: action.payload}
+        case "SET_ARTISTS":
+            return { ...state, artists: action.payload}
+        case "SET_ACCESS_TOKEN":
+            return { ...state, accessToken: action.payload}
     }
     return state
 }
