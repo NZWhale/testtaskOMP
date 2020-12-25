@@ -14,7 +14,6 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        {/* <MainPage history={history}/> */}
         <Route component={MainPage} />
       </Provider>
     )

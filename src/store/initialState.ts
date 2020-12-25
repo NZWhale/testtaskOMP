@@ -19,6 +19,7 @@ const initialState: StateInterface = {
             href: ""
         }
     },
+    artistId: ""
 }
 
 export default initialState

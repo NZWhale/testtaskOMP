@@ -66,21 +66,23 @@ class FullPlaylistCard extends React.Component<FullPlaylistCardProps & PropsFrom
 
     render() {
         const tracks = this.state.tracks.map((track: any) =>
-        <Card style={{
-            width: '18rem',
-            marginBottom: "12px"
-        }}>
-        <Card.Text>{track.track.artists.map((artist: Artist) => artist.name + " ") + "-" + track.track.name} <img width = "50px" src={track.track.album.images[2].url} /></Card.Text>
-        <audio controls style={{width: "99%"}}>
-        <source src={track.track.preview_url}></source>
-        </audio>
-        </Card>
+        <Card className="bg-dark text-white" style={{marginTop:"12px"}}>
+        <Card.Img src={track.track.album.images[0].url} alt="Card image" />
+        <Card.ImgOverlay>
+            <Card.Title>{track.track.artists.map((artist: Artist) => artist.name + " ") + "-" + track.track.name} </Card.Title>
+            <Card.Text>
+                <audio controls style={{ width: "99%" }}>
+                    <source src={track.track.preview_url}></source>
+                </audio>
+            </Card.Text>
+        </Card.ImgOverlay>
+    </Card>
         )
         return (
             <>
                     <Card style={{
                         width: '18rem',
-                        marginBottom: "12px"
+                        marginLeft: "40%"
                     }}>
                         {tracks}
                     </Card>

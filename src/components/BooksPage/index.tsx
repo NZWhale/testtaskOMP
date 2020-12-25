@@ -119,7 +119,7 @@ class BooksPage extends React.Component<PropsFromState> {
                     </Form>
                 </div>
                 <div style={{
-                    marginLeft: "22.5%",
+                    marginLeft: "20%",
                     marginTop: "12px"
                 }}>
                     {booksList}

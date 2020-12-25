@@ -11,7 +11,7 @@ import { Album, StateInterface } from '../../types';
 import MusicCard from './MusicCard';
 import PlaylistCard from './PlaylistCard';
 
-export const token = "BQB9tTCVMfInM0a_jLJ8ZH4GQ1DnJHmHxeGp6w7TJAjwHdQWCyEFtKK-quk_IM38O60Jq8UfR_OTZIHfAB2td0hOy2lO5MY6iOfiFLyJqKF5jAlQqrDwiFWiVA1pViD3zU9Hv6KXh_lwYoejnEuuDkxLsK0MgLT56cJSb5Ak0w9kWoeJCoA"
+export const token = "BQA3hqacD0wlGXYR3SWwl-gCgvEidAhvU-Pb4hhGkmgK1YiYR72fZ5JCvM7s0xv_Tx2w4GFX0c4InsANnR7VcQtMHjrWar3AQIWvcNOxTJy4v0TzVrRxXzfFjI6Je27Ey_1pR-BgWqVoURvOwfkIf51A5rXbdEgQqKCE_lZ0umvkpyDAJbM"
 
 interface PropsFromState {
     musicGenres: Array<any>,

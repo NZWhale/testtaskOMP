@@ -12,7 +12,8 @@ export interface StateInterface {
   musicGenres: Array<any>,
   newReleases: Array<Album>,
   playlists: Array<any>,
-  fullPlaylistInfo: FullPlaylistInfo 
+  fullPlaylistInfo: FullPlaylistInfo,
+  artistId: string
 }
 
 export interface Track {

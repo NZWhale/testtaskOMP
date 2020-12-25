@@ -4,6 +4,7 @@ import BooksPage from '../BooksPage';
 import Header from '../Header';
 import MoviesPage from '../MoviesPage';
 import MusicPage from '../MusicPage';
+import FullMusicCard from '../MusicPage/FullMusicCard';
 import FullPlaylistCard from '../MusicPage/FullPlaylistCard';
 
 
@@ -21,6 +22,7 @@ class MainPage extends React.Component<RouteComponentProps> {
                         <Route path='/books'  component={BooksPage} />
                         <Route path='/music'  component={MusicPage} />
                         <Route path='/fullplaylistcard'  component={FullPlaylistCard} />
+                        <Route path='/fullmusiccard' component={FullMusicCard}/>
                         <Redirect from="/" to="/movies" />
                     </Switch>
                 </BrowserRouter>

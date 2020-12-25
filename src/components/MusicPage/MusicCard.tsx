@@ -3,6 +3,8 @@ import * as React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import setArtistId from '../../store/actionCreaters/setArtistId';
+import store from '../../store/store';
 import { Album, Artist, FullPlaylistInfo, Image, StateInterface } from '../../types';
 
 
@@ -18,7 +20,7 @@ interface PropsFromState {
 
 class MusicCard extends React.Component<MusicCardProps & PropsFromState> {
     handleClick = () => {
-        this.props.history.push("/");
+        this.props.history.push("/fullmusiccard");
     }
     render() {
         return (
@@ -26,7 +28,10 @@ class MusicCard extends React.Component<MusicCardProps & PropsFromState> {
                     <Card style={{
                         width: '18rem',
                         marginBottom: "12px"
-                    }} onClick={() => this.handleClick()}>
+                    }} onClick={() => {
+                        store.dispatch(setArtistId(this.props.artists[0].id))
+                        this.handleClick()
+                    }}>
                         <Card.Img variant="top" src={this.props.images[0].url} />
                         <Card.Body>
                             <Card.Title>{this.props.artists.map(artist => artist.name + " ")}</Card.Title>
